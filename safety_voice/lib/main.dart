@@ -214,7 +214,7 @@ class MainScreen extends StatelessWidget {
               const SizedBox(height: 100),
           
               Image.asset(
-                'assets/logo.png', // 법원 아이콘 이미지 필요
+                'assets/logo.png',
                 height: 350,
               ),
               const Spacer(),
