@@ -79,7 +79,18 @@ flutter:
     - assets/safezone3.png
     - assets/battery_icon.png
 
- 
+    - assets/images/recordingList.png
+    - assets/images/safeZone.png
+    - assets/images/wordRecognition.png
+    - assets/images/calendar.png
+    - assets/images/calendar_gray.png
+    - assets/images/list.png
+    - assets/images/list_gray.png
+    - assets/images/monday.png
+    - assets/images/back.png
+    - assets/images/plus.png
+    - assets/images/record.png
+    - assets/m4a/test.m4a
 
     
    
