@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class WaveformPainter extends CustomPainter {
   final List<double> amplitudes;
   
+  
   WaveformPainter({required this.amplitudes});
 
   @override
@@ -47,6 +48,8 @@ class WaveformPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});  // SetupScreen을 SettingScreen으로 수정
+
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }
@@ -297,31 +300,24 @@ class _SettingScreenState extends State<SettingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                onTap: () => Navigator.pushNamed(context, '/listhome'),
+
                   child: Image.asset(
                     'assets/recordingList.png',
                     fit: BoxFit.contain,
                   ),
                 ),
                 GestureDetector(
-                                 onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SettingScreen()),
-    );
-  },
+                 onTap: () => Navigator.pushNamed(context, '/safezone'),
+
                   child: Image.asset(
                     'assets/wordRecognition2.png',
                     fit: BoxFit.contain,
                   ),
                 ),
                 GestureDetector(
-                                 onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SetupScreen()),
-    );
-  },
+                  onTap: () => Navigator.pushNamed(context, '/setup'),
+
                   child: Image.asset(
                     'assets/safeZone_word.png',
                     fit: BoxFit.contain,

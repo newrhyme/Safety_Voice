@@ -152,6 +152,7 @@ class CalendarHome extends StatelessWidget {
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/setup'),
 
+
               
                   child: Container(
                     child: Image.asset(
@@ -162,6 +163,7 @@ class CalendarHome extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/setup'),
+
                   child: Container(
                     child: Image.asset(
                       'assets/images/safeZone.png',
