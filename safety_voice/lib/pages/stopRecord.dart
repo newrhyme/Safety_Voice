@@ -14,7 +14,7 @@ class StopRecord extends StatefulWidget {
 class _StopRecordState extends State<StopRecord> {
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   bool _isRecording = false;
-  bool _isRecorderInitialized = false; // Recorder 초기화 상태
+  bool _isRecorderInitialized = false;
   String? _filePath;
 
   @override
@@ -27,12 +27,10 @@ class _StopRecordState extends State<StopRecord> {
     try {
       final status = await Permission.microphone.request();
       if (status != PermissionStatus.granted) {
-        print('Microphone permission not granted');
         throw RecordingPermissionException('Microphone permission not granted');
       }
       await _recorder.openRecorder();
-      _isRecorderInitialized = true; // 초기화 완료 상태로 설정
-      print('Recorder initialized');
+      _isRecorderInitialized = true;
     } catch (e) {
       print('Error initializing recorder: $e');
     }
@@ -40,17 +38,11 @@ class _StopRecordState extends State<StopRecord> {
 
   Future<void> _startRecording() async {
     try {
-      if (!_isRecorderInitialized) {
-        print('Recorder is not initialized');
-        throw Exception('Recorder is not initialized');
-      }
+      if (!_isRecorderInitialized) throw Exception('Recorder is not initialized');
       final dir = await getApplicationDocumentsDirectory();
       _filePath = '${dir.path}/recorded_audio.aac';
       await _recorder.startRecorder(toFile: _filePath);
-      print('Recording started');
-      setState(() {
-        _isRecording = true;
-      });
+      setState(() => _isRecording = true);
     } catch (e) {
       print('Error starting recording: $e');
     }
@@ -59,10 +51,7 @@ class _StopRecordState extends State<StopRecord> {
   Future<void> _stopRecording() async {
     try {
       await _recorder.stopRecorder();
-      print('Recording stopped');
-      setState(() {
-        _isRecording = false;
-      });
+      setState(() => _isRecording = false);
     } catch (e) {
       print('Error stopping recording: $e');
     }
@@ -99,24 +88,49 @@ class _StopRecordState extends State<StopRecord> {
           automaticallyImplyLeading: false,
         ),
       ),
-      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/record.png', width: 200, height: 200),
-            const SizedBox(height: 20),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              width: _isRecording ? 220 : 200,
+              height: _isRecording ? 220 : 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _isRecording ? Colors.red.withOpacity(0.8) : Colors.grey.withOpacity(0.5),
+              ),
+              child: Center(
+                child: Icon(
+                  _isRecording ? Icons.mic : Icons.mic_none,
+                  color: Colors.white,
+                  size: 80,
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _isRecording ? _stopRecording : _startRecording,
               style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 backgroundColor: _isRecording ? Colors.red : Colors.green,
               ),
-              child: Text(_isRecording ? 'Stop Recording' : 'Start Recording'),
+              child: Text(
+                _isRecording ? 'Stop Recording' : 'Start Recording',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             if (_filePath != null && !_isRecording)
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text('Recording saved at: $_filePath'),
+                child: Text(
+                  'Recording saved at: $_filePath',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
               ),
           ],
         ),
