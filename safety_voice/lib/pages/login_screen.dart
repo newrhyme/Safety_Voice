@@ -42,7 +42,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/setup'),
+                onPressed: () => Navigator.pushNamed(context, '/calendarhome'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B7AFF),
                   padding: const EdgeInsets.symmetric(vertical: 16),
