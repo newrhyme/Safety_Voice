@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safety_voice/pages/word_setting.dart';
 
 // 타임테이블 버튼 추가된 SetupScreen 코드
 class SetupScreen extends StatefulWidget {
@@ -389,9 +390,12 @@ Container(
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    // 두 번째 버튼 동작 추가
-                  },
+                 onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingScreen()),
+    );
+  },
                   child: Container(
                     child: Image.asset(
                       'assets/wordRecognition.png',

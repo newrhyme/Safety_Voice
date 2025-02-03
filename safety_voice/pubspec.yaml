@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -39,6 +40,7 @@ dependencies:
   permission_handler: ^11.3.1
   audioplayers: ^6.1.0
   intl: ^0.20.2
+  shared_preferences: ^2.5.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +66,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
+    - assets/m4a/
     - assets/logo.png
     - assets/word.png
     - assets/safety.png
@@ -73,12 +77,15 @@ flutter:
     - assets/alrim.png
     - assets/recordingList.png
     - assets/wordRecognition.png
+    - assets/wordRecognition2.png
     - assets/safeZone.png
     - assets/safezone1.png
     - assets/safezone2.png
     - assets/safezone3.png
     - assets/battery_icon.png
-
+    - assets/safeZone_word.png
+    - assets/learnimage.png
+    - assets/recordword.png
  
 
     

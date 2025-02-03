@@ -6,6 +6,12 @@ import 'pages/main_screen.dart';
 import 'pages/login_screen.dart';
 import 'pages/timetable_screen.dart';
 
+import 'package:safety_voice/pages/listHome.dart';
+import 'package:safety_voice/pages/calendarHome.dart';
+import 'package:safety_voice/pages/nonamed.dart';
+import 'package:safety_voice/pages/caseFile.dart';
+import 'package:safety_voice/pages/stopRecord.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -28,9 +34,14 @@ class MyApp extends StatelessWidget {
         '/timetable': (context) => const TimeTableDemo(),
         '/signup': (context) => const SignupScreen(),
         '/setup': (context) => const SetupScreen(),
+
+        '/listhome': (context) => const ListHome(),
+        '/calendarhome': (context) => const CalendarHome(),
+        '/nonamed': (context) => const Nonamed(),
+        '/casefile': (context) => const CaseFile(),
+        '/stoprecord': (context) => const StopRecord(),
         
       },
     );
   }
 }
-

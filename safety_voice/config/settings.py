@@ -25,10 +25,7 @@ SECRET_KEY = 'django-insecure-m5$!***!)3w^=t3jhooyb*y$&*(6&!)*7i$x$*o)4^v_5@(7nk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
-# Application definition
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,7 +34,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
+    'rest_framework',
+    'corsheaders',  # CORS 설정을 위해 필요
+    'app',  # 사용자 앱
 ]
+
+# 커스텀 User 모델 설정
+AUTH_USER_MODEL = 'app.User'
+
+# CORS 설정
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    # ... 다른 미들웨어
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React
+    "http://localhost:8000",  # Django
+]
+
+# REST Framework 설정
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+# Application definition
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
