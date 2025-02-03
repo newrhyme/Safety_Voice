@@ -110,7 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+
                 onPressed: _isLoading ? null : _login,
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B7AFF),
                   padding: const EdgeInsets.symmetric(vertical: 16),

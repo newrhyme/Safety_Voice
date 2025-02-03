@@ -1,4 +1,3 @@
-// TODO Implement this library.// TODO Implement this library.
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -151,8 +150,6 @@ class CalendarHome extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/setup'),
-
-              
                   child: Container(
                     child: Image.asset(
                       'assets/images/wordRecognition.png',

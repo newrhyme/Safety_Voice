@@ -41,6 +41,10 @@ dependencies:
   audioplayers: ^6.1.0
   intl: ^0.20.2
   shared_preferences: ^2.5.1
+  flutter_assets: ^0.0.4
+  record: ^5.2.0
+  record_windows: ^1.0.4
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -87,7 +91,8 @@ flutter:
     - assets/learnimage.png
     - assets/recordword.png
  
-
+    - assets/images/
+    - assets/m4a/
     
    
   # An image asset can refer to one or more resolution-specific "variants", see
