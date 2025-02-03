@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:safety_voice/pages/setup_screen.dart';
 import 'package:safety_voice/pages/signup_screen.dart';
+import 'package:safety_voice/pages/word_setting.dart';
 import 'pages/main_screen.dart';
 import 'pages/login_screen.dart';
 import 'pages/timetable_screen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/timetable': (context) => const TimeTableDemo(),
         '/signup': (context) => const SignupScreen(),
         '/setup': (context) => const SetupScreen(),
+        '/safezone': (context) => const SettingScreen(),
 
         '/listhome': (context) => const ListHome(),
         '/calendarhome': (context) => const CalendarHome(),
@@ -45,4 +47,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

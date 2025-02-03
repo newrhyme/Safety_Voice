@@ -225,9 +225,7 @@ class ListHome extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    // 두 번째 버튼 동작 추가
-                  },
+                 onTap: () => Navigator.pushNamed(context, '/safezone'),
                   child: Container(
                     child: Image.asset(
                       'assets/images/wordRecognition.png',

@@ -5,6 +5,11 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size; // 화면 크기 가져오기
+    final double logoHeight = size.height * 0.6; // 화면 높이의 35% 크기
+    final double buttonWidth = size.width * 0.75; // 화면 너비의 80%
+    final double buttonHeight = size.height * 0.07; // 화면 높이의 6%
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -12,60 +17,55 @@ class MainScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 100),
+              SizedBox(height: size.height * 0.1),
               Image.asset(
                 'assets/logo.png',
-                height: 350,
+                height: logoHeight,
               ),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.all(80.0),
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                 child: Column(
                   children: [
                     SizedBox(
-                      width: double.infinity,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: ElevatedButton(
                         onPressed: () => Navigator.pushNamed(context, '/login'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6B7AFF),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: const Text(
                           '로그인',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: size.height * 0.02),
                     SizedBox(
-                      width: double.infinity,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: ElevatedButton(
                         onPressed: () => Navigator.pushNamed(context, '/signup'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6B7AFF),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: const Text(
                           '회원가입',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+              SizedBox(height: size.height * 0.05),
             ],
           ),
         ),
