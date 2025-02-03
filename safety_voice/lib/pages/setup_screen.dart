@@ -379,8 +379,9 @@ Container(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                                 onTap: () => Navigator.pushNamed(context, '/listhome'),
-
+                  onTap: () {
+                    // 첫 번째 버튼 동작 추가
+                  },
                   child: Container(
                     child: Image.asset(
                       'assets/recordingList.png',
@@ -399,8 +400,9 @@ Container(
                   ),
                 ),
                 GestureDetector(
-                               onTap: () => Navigator.pushNamed(context, '/setup'),
-
+                  onTap: () {
+                    // 세 번째 버튼 동작 추가
+                  },
                   child: Container(
                     child: Image.asset(
                       'assets/safeZone.png',
