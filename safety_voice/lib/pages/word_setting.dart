@@ -1,3 +1,4 @@
+//단어 인식
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:safety_voice/pages/setup_screen.dart';
@@ -47,15 +48,17 @@ class WaveformPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});  // SetupScreen을 SettingScreen으로 수정
+  final bool isEditing;
+  const SettingScreen({super.key, this.isEditing = false});
 
   @override
-  _SettingScreenState createState() => _SettingScreenState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  bool isEditing = false;
+  late bool isEditing;
   bool isLearning = false;
   bool isRecording = false;
   bool isLearningCompleted = false;  // 추가
@@ -77,40 +80,68 @@ class _SettingScreenState extends State<SettingScreen> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    isEditing = widget.isEditing;  // 외부에서 받은 값을 초기화
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-       child: AppBar(
-    backgroundColor: Colors.white,
-    automaticallyImplyLeading: false, // 뒤로가기 버튼 제거
-    title: Padding(
-      padding: EdgeInsets.only(top: 26, bottom: 26, left: 26),
-      child: Text(
-        '쀼의 세계님의 설정 현황',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: MediaQuery.of(context).size.width * 0.07,
-        ),
-      ),
-    ),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: isEditing
+              ? GestureDetector(
+                  onTap: () => Navigator.pop(context), // 수정 모드일 때만 뒤로가기
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/back.png', height: 24),
+                      const SizedBox(width: 8),
+                      Text(
+                        '설정값 수정',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Text(
+                  '이대광님의 설정 현황',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                ),
           actions: [
-            TextButton(
-              onPressed: () {
-                setState(() => isEditing = true);
-              },
-              child: const Text(
-                '수정',
-                style: TextStyle(
-                  color: Color(0xFF787878),
-                  fontSize: 15,
+            if (!isEditing)
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SettingScreen(isEditing: true), // 수정모드로 이동
+                    ),
+                  );
+                },
+                child: const Text(
+                  '수정',
+                  style: TextStyle(
+                    color: Color(0xFF787878),
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
+
       body: SafeArea(
         child: Column(
           children: [
@@ -130,22 +161,32 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              'assets/state.png',
-                              height: 25,
+                            Expanded(
+                              flex: 3,
+                              child: Align(
+                                alignment: Alignment.centerLeft, // 🔹 왼쪽 정렬
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0), // 🔹 왼쪽 마진
+                                  child: Image.asset(
+                                    'assets/currentword.png',
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 70),
-                            Text(
-                              '잠만',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 25,
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                '잠만',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                  
                        Container(
                         height: 99,
                         padding: const EdgeInsets.all(26),
@@ -157,20 +198,32 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              'assets/state.png',
-                              height: 25,
+                            Expanded(
+                              flex: 3,
+                              child: Align(
+                                alignment: Alignment.centerLeft, // 🔹 왼쪽 정렬
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0), // 🔹 왼쪽 마진
+                                  child: Image.asset(
+                                    'assets/recordnum.png',
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 70),
-                            Text(
-                              '2초 안에 3회',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 25,
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                '2초 안에 3회',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ],
                         ),
+
                       ),
                       Container(
                         width: double.infinity,
@@ -188,16 +241,27 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Image.asset(
-                              'assets/state.png',
-                              height: 25,
+                            Expanded(
+                              flex: 3,
+                              child: Align(
+                                alignment: Alignment.centerLeft, // 🔹 왼쪽 정렬
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0), // 🔹 왼쪽 마진
+                                  child: Image.asset(
+                                    'assets/numnum.png',
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
                             ),
-                            const SizedBox(width: 70),
-                            Text(
-                              '4주 안에 5회',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 25,
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                '4초 안에 5회',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ],
@@ -208,60 +272,67 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 1.0,
                         color: Color(0xFFCACACA),
                       ),
-                  Container(
-  padding: const EdgeInsets.all(26),
-  decoration: const BoxDecoration(
-    border: Border(
-      bottom: BorderSide(color: Colors.black12),
-    ),
-  ),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.start, // 모든 요소를 왼쪽으로 정렬
-    children: [
-      // 이미지: 왼쪽에 배치
-      Image.asset(
-        'assets/safelocation.png', // 안전지대 위치 이미지 경로
-   
-        height: 25, // 이미지 크기
-      ),
-      
-      // 빈 공간: 이미지와 텍스트 사이의 공간을 유지하기 위해
-      const SizedBox(width: 40),
+                      Container(
+                        padding: const EdgeInsets.all(26),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.black12),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // 🔹 이미지 영역 (flex: 2)
+                            Expanded(
+                              flex: 3,
+                              child: Align(
+                                alignment: Alignment.centerLeft, // 🔹 왼쪽 정렬
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0), // 🔹 왼쪽 마진
+                                  child: Image.asset(
+                                    'assets/number.png',
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
 
-      // 텍스트: 왼쪽 정렬
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // 텍스트 왼쪽 정렬
-        children: [
-          Row(
-            children: [
-                     
-   
-              Text('1번', style: TextStyle(color: Colors.black, fontSize: 18,)),
-              const SizedBox(width: 8),
-              Text('112', style: TextStyle(color: Colors.black,fontSize: 18)),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text('2번', style: TextStyle(color: Colors.black,fontSize: 18)),
-              const SizedBox(width: 8),
-              Text('010-1234-5678', style: TextStyle(color: Colors.black,fontSize: 18)),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text('3번', style: TextStyle(color: Colors.black,fontSize: 18)),
-              const SizedBox(width: 8),
-              Text('010-9876-5432', style: TextStyle(color: Colors.black,fontSize: 18)),
-            ],
-          ),
-        ],
-      ),
-    ],
-  ),
-),
+                            // 🔸 텍스트 영역 (flex: 3)
+                            Expanded(
+                              flex: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text('1번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                      const SizedBox(width: 8),
+                                      Text('112', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text('2번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                      const SizedBox(width: 8),
+                                      Text('010-1234-5678', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text('3번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                      const SizedBox(width: 8),
+                                      Text('010-9876-5432', style: TextStyle(color: Colors.black, fontSize: 14)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ),
                   
                     ] else ...[
                       _buildEditView(),
@@ -279,7 +350,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   '광고',
                   style: TextStyle(
                     color: Color(0xFF787878),
-                    fontSize: 25,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -293,7 +364,7 @@ class _SettingScreenState extends State<SettingScreen> {
           elevation: 10,
           color: const Color.fromARGB(255, 58, 58, 58),
           child: BottomAppBar(
-            color: const Color.fromARGB(255, 194, 181, 181),
+            color: const Color.fromARGB(255, 255, 255, 255),
             shape: const CircularNotchedRectangle(),
             notchMargin: 8.0,
             child: Row(
@@ -346,14 +417,26 @@ Widget _buildEditView() {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/state.png',
-                  height: 25,
-                ),
-                const SizedBox(width: 50),
+                // 🔹 이미지 (flex: 2)
                 Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Image.asset(
+                        'assets/currentword.png',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 🔸 텍스트필드 (flex: 3)
+                Expanded(
+                  flex: 3,
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 35),
+                    constraints: const BoxConstraints(maxHeight: 35),
                     child: TextField(
                       controller: wordController,
                       decoration: const InputDecoration(
@@ -369,120 +452,121 @@ Widget _buildEditView() {
                 ),
               ],
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-TextButton(
-   onPressed: () {
-     setState(() {
-       isLearning = true;
-       isRecording = true;
-       bool isLearningCompleted = false;
-       isLearningCompleted = false; // 학습 시작할 때 완료 상태 초기화
-     });
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isLearning = true;
+                      isRecording = true;
+                      bool isLearningCompleted = false;
+                      isLearningCompleted = false; // 학습 시작할 때 완료 상태 초기화
+                    });
 
-     _timer?.cancel();
-     
-     _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-       if (mounted && isRecording) {
-         setState(() {
-           amplitudes = List.generate(
-             30,
-             (index) => 0.3 + Random().nextDouble() * 0.7,
-           );
-         });
-       }
-     });
+                    _timer?.cancel();
+                    
+                    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+                      if (mounted && isRecording) {
+                        setState(() {
+                          amplitudes = List.generate(
+                            30,
+                            (index) => 0.3 + Random().nextDouble() * 0.7,
+                          );
+                        });
+                      }
+                    });
 
-     showDialog(
-       context: context,
-       barrierDismissible: false,
-       builder: (BuildContext context) {
-         return StatefulBuilder(
-           builder: (context, setDialogState) {
-             return Dialog(
-               backgroundColor: Colors.white,
-               shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.circular(20.0),
-               ),
-               child: Container(
-                 height: 400,
-                 padding: EdgeInsets.all(20),
-                 child: Column(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Column(
-                       children: [],
-                     ),
-                     Container(
-                       child: Column(
-                         children: [
-                           Image.asset(
-                             'assets/learnimage.png',
-                             height: 206,
-                           ),
-                           Image.asset(
-                             'assets/recordword.png',
-                             height: 25,
-                           ),
-                         ],
-                       ),
-                     ),
-                     Container(
-                       height: 80,
-                       child: CustomPaint(
-                         painter: WaveformPainter(amplitudes: amplitudes),
-                         size: Size(double.infinity, 60),
-                       ),
-                     ),
-                     ElevatedButton(
-                       onPressed: () {
-                         setState(() {
-                           isLearningCompleted = true;
-                         });
-                         Navigator.of(context).pop(); // 다이얼로그 닫기
-                       },
-                       style: ElevatedButton.styleFrom(
-                         backgroundColor: Colors.blue,
-                         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                         shape: RoundedRectangleBorder(
-                           borderRadius: BorderRadius.circular(8),
-                         ),
-                       ),
-                       child: Text(
-                         '완료',
-                         style: TextStyle(
-                           color: Colors.white,
-                           fontSize: 16,
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-             );
-           },
-         );
-       },
-     ).then((_) {
-       setState(() {
-         isLearning = false;
-         isRecording = false;
-         // isLearningCompleted는 유지 (완료 버튼으로 설정된 상태 유지)
-       });
-       _timer?.cancel();
-     });
-   },
-   child: Text(
-     isLearningCompleted ? '학습완료!' : (isLearning ? '학습중..' : '학습하기'),
-     style: TextStyle(
-       color: isLearningCompleted 
-         ? Colors.blue 
-         : (isLearning ? Colors.green : Colors.red),
-       fontSize: 15,
-     ),
-   ),
- ),
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return StatefulBuilder(
+                          builder: (context, setDialogState) {
+                            return Dialog(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Container(
+                                height: 400,
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [],
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/learnimage.png',
+                                            height: 206,
+                                          ),
+                                          Image.asset(
+                                            'assets/recordword.png',
+                                            height: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 80,
+                                      child: CustomPaint(
+                                        painter: WaveformPainter(amplitudes: amplitudes),
+                                        size: Size(double.infinity, 60),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLearningCompleted = true;
+                                        });
+                                        Navigator.of(context).pop(); // 다이얼로그 닫기
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue,
+                                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        '완료',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ).then((_) {
+                      setState(() {
+                        isLearning = false;
+                        isRecording = false;
+                        // isLearningCompleted는 유지 (완료 버튼으로 설정된 상태 유지)
+                      });
+                      _timer?.cancel();
+                    });
+                  },
+                  child: Text(
+                    isLearningCompleted ? '학습완료!' : (isLearning ? '학습중..' : '학습하기'),
+                    style: TextStyle(
+                      color: isLearningCompleted 
+                        ? Colors.blue 
+                        : (isLearning ? Colors.green : Colors.red),
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -507,14 +591,26 @@ TextButton(
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/state.png',
-                  height: 25,
-                ),
-                const SizedBox(width: 50),
+                // 🔹 이미지 (flex: 2)
                 Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Image.asset(
+                        'assets/recordnum.png',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 🔸 입력 필드 그룹 (flex: 3)
+                Expanded(
+                  flex: 3,
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 35),
+                    constraints: const BoxConstraints(maxHeight: 35),
                     child: Row(
                       children: [
                         SizedBox(
@@ -536,7 +632,7 @@ TextButton(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             '초 안에',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                         SizedBox(
@@ -559,7 +655,7 @@ TextButton(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             '회',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                       ],
@@ -568,6 +664,7 @@ TextButton(
                 ),
               ],
             ),
+
           ],
         ),
       ),
@@ -590,12 +687,24 @@ TextButton(
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/state.png',
-                  height: 25,
-                ),
-                const SizedBox(width: 50),
+                // 🔹 이미지 영역 (flex: 2)
                 Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Image.asset(
+                        'assets/numnum.png',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // 🔸 입력 필드 영역 (flex: 3)
+                Expanded(
+                  flex: 3,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: 35),
                     child: Row(
@@ -618,8 +727,8 @@ TextButton(
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            '주 안에',
-                            style: TextStyle(fontSize: 20),
+                            '초 안에',
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                         SizedBox(
@@ -642,7 +751,7 @@ TextButton(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             '회',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                       ],
@@ -651,6 +760,7 @@ TextButton(
                 ),
               ],
             ),
+
           ],
         ),
       ),
@@ -669,76 +779,87 @@ TextButton(
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/safelocation.png',
-              height: 25,
+            // 🔹 이미지 영역 (flex: 2)
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Image.asset(
+                    'assets/number.png',
+                    height: 20,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text('1번', style: TextStyle(color: Colors.black, fontSize: 18,)),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: 165,
-                      child: TextField(
-                        controller: phoneControllers[0],
-                        decoration: InputDecoration(
-                          hintText: '112',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+
+            // 🔸 전화번호 입력 영역 (flex: 3)
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('1번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: phoneControllers[0],
+                          decoration: InputDecoration(
+                            hintText: '112',
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          ),
+                          keyboardType: TextInputType.phone,
                         ),
-                        keyboardType: TextInputType.phone,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text('2번', style: TextStyle(color: Colors.black, fontSize: 18)),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: 165,
-                      child: TextField(
-                        controller: phoneControllers[1],
-                        decoration: InputDecoration(
-                          hintText: '010-1234-5678',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text('2번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: phoneControllers[1],
+                          decoration: InputDecoration(
+                            hintText: '010-1234-5678',
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          ),
+                          keyboardType: TextInputType.phone,
                         ),
-                        keyboardType: TextInputType.phone,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text('3번', style: TextStyle(color: Colors.black, fontSize: 18)),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: 165,
-                      child: TextField(
-                        controller: phoneControllers[2],
-                        decoration: InputDecoration(
-                          hintText: '010-9876-5432',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text('3번', style: TextStyle(color: Colors.black, fontSize: 14)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: phoneControllers[2],
+                          decoration: InputDecoration(
+                            hintText: '010-9876-5432',
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          ),
+                          keyboardType: TextInputType.phone,
                         ),
-                        keyboardType: TextInputType.phone,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
+        )
+
       ),
 
       SizedBox(height: 20),
@@ -758,7 +879,7 @@ TextButton(
           child: Text(
             '설정값 수정하기',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20,
               color: Colors.white,
             ),
           ),
@@ -779,7 +900,7 @@ TextButton(
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 8),
           Row(
@@ -790,7 +911,7 @@ TextButton(
                   controller: weeksController,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 16),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
@@ -804,7 +925,7 @@ TextButton(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   '초 안에',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
               SizedBox(
@@ -813,7 +934,7 @@ TextButton(
                   controller: countController,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 16),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
@@ -827,7 +948,7 @@ TextButton(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   '회',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ],
@@ -852,7 +973,7 @@ Widget _buildInfoItem(String title, String value) {
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -860,7 +981,7 @@ Widget _buildInfoItem(String title, String value) {
         Expanded(
           child: Text(
             value,
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 16),
           ),
         ),
       ],
@@ -882,7 +1003,7 @@ Widget _buildEmergencyContacts() {
         Text(
           '비상 연락망',
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -893,22 +1014,22 @@ Widget _buildEmergencyContacts() {
           children: [
             Row(
               children: [
-                Text('1번', style: TextStyle(fontSize: 20)),
-                Text('  112', style: TextStyle(fontSize: 20)),  // 약간의 공백만 추가
+                Text('1번', style: TextStyle(fontSize: 16)),
+                Text('  112', style: TextStyle(fontSize: 16)),  // 약간의 공백만 추가
               ],
             ),
             SizedBox(height: 8),
             Row(
               children: [
-                Text('2번', style: TextStyle(fontSize: 20)),
-                Text('  010-1234-5678', style: TextStyle(fontSize: 20)),
+                Text('2번', style: TextStyle(fontSize: 16)),
+                Text('  010-1234-5678', style: TextStyle(fontSize: 16)),
               ],
             ),
             SizedBox(height: 8),
             Row(
               children: [
-                Text('3번', style: TextStyle(fontSize: 20)),
-                Text('  010-9876-5432', style: TextStyle(fontSize: 20)),
+                Text('3번', style: TextStyle(fontSize: 16)),
+                Text('  010-9876-5432', style: TextStyle(fontSize: 16)),
               ],
             ),
           ],
@@ -925,7 +1046,7 @@ Widget _buildEmergencyContacts() {
         children: [
           Text(
             '비상 연락망',
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 16),
           ...List.generate(3, (index) {
@@ -935,14 +1056,14 @@ Widget _buildEmergencyContacts() {
                 children: [
                   Text(
                     '${index + 1}번',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: TextField(
                       controller: phoneControllers[index],
                       keyboardType: TextInputType.phone,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 16),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
