@@ -221,7 +221,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/calenda'),
+                  onPressed: _isFormValid ? _login : null,
+                  // onPressed: () => Navigator.pushReplacementNamed(context, '/calenda'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isFormValid 
                         ? const Color(0xFF577BE5) // 파란색 (입력 완료시)
